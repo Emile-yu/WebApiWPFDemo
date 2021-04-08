@@ -28,7 +28,10 @@ namespace RetailWPFUserInterface
 
         protected override void Configure()
         {
-            _container.Instance(_container);
+            _container.Instance(_container)
+                .PerRequest<IProductEndpoint, ProductEndpoint>();
+
+
 
             _container
                 .Singleton<IWindowManager, WindowManager>()
@@ -42,6 +45,7 @@ namespace RetailWPFUserInterface
                 .ToList()
                 .ForEach(viewModelType => _container.RegisterPerRequest(
                     viewModelType, viewModelType.ToString(), viewModelType));
+              
         }
 
         protected override void OnStartup(object sender, StartupEventArgs e)

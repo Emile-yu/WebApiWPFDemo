@@ -21,6 +21,15 @@ namespace RetailWPFUserInterface.Library.Api
             InitializeClient();
             this._loggedInUserModel = loggedInUserModel;
         }
+
+        public HttpClient ApiClient
+        {
+            get
+            {
+                return _apiClient;
+            }
+        }
+
         private void InitializeClient()
         {
             string api = ConfigurationManager.AppSettings["api"];
@@ -80,7 +89,6 @@ namespace RetailWPFUserInterface.Library.Api
                 }
             }
         }
-
 
     }
 }

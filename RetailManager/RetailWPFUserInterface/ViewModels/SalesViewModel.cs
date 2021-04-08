@@ -1,4 +1,6 @@
 ﻿using Caliburn.Micro;
+using RetailWPFUserInterface.Library.Api;
+using RetailWPFUserInterface.Library.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,9 +11,28 @@ namespace RetailWPFUserInterface.ViewModels
 {
     public class SalesViewModel : Screen
     {
-        private BindableCollection<string> _products;
+        public SalesViewModel(IProductEndpoint productEndpoint)
+        {
+            this._productEndpoint = productEndpoint;
+            
+        }
 
-        public BindableCollection<string> Products
+        //when the load products is done, we show the viec
+        protected override async void OnViewLoaded(object view)
+        {
+            base.OnViewLoaded(view);
+            await LoadProducts();
+        }
+
+        public async Task LoadProducts()
+        {
+            var productList = await _productEndpoint.GetAll();
+            Products = new BindableCollection<ProductModel>(productList);
+        }
+
+        private BindableCollection<ProductModel> _products;
+
+        public BindableCollection<ProductModel> Products
         {
             get { return _products; }
             set { 
@@ -35,6 +56,7 @@ namespace RetailWPFUserInterface.ViewModels
         }
 
         private int _itemQuantity;
+        private IProductEndpoint _productEndpoint;
 
         public int ItemQuantity
         {
