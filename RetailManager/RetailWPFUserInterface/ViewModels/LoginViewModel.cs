@@ -10,8 +10,9 @@ namespace RetailWPFUserInterface.ViewModels
 {
     public class LoginViewModel : Screen
     {
-        private string _username;
-        private string _password;
+        private string _username = "tim@iamtimcoreyc.com";
+        private string _password = "Pwd12345.";
+        private bool _isErrorVisible;
         private IAPIHelper _apiHelper;
         public LoginViewModel(IAPIHelper apiHelper)
         {
@@ -36,6 +37,27 @@ namespace RetailWPFUserInterface.ViewModels
                 NotifyOfPropertyChange(() => CanLogin);
             }
         }
+        public bool IsErrorVisible
+        {
+            get 
+            {
+                return !String.IsNullOrWhiteSpace(ErrorMessage); 
+            }
+            
+        }
+
+        private string _errorMessage;
+
+        public string ErrorMessage
+        {
+            get { return _errorMessage; }
+            set { 
+                _errorMessage = value;
+                NotifyOfPropertyChange(() => ErrorMessage);
+                NotifyOfPropertyChange(() => IsErrorVisible);
+            }
+        }
+
 
         //public bool CanLogin(string username, string password)
         //{
@@ -51,7 +73,15 @@ namespace RetailWPFUserInterface.ViewModels
 
         public async Task Login()
         {
-            var result = await _apiHelper.Authenticate(username, password);
+            try
+            {
+                ErrorMessage = "";
+                var result = await _apiHelper.Authenticate(username, password);
+            }
+            catch (Exception ex)
+            {
+                ErrorMessage = ex.Message;
+            }
 
         }
 
