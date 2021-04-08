@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RetailWPFUserInterface", "R
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RetailWPFUserInterface.Library", "RetailWPFUserInterface.Library\RetailWPFUserInterface.Library.csproj", "{B597078B-632B-4472-9890-8FF54D411AEB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RetailDataManager.Library", "RetailDataManager.Library\RetailDataManager.Library.csproj", "{F92D80FE-DBF3-4FEC-A6BA-1354D795A9EE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{B597078B-632B-4472-9890-8FF54D411AEB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B597078B-632B-4472-9890-8FF54D411AEB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B597078B-632B-4472-9890-8FF54D411AEB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F92D80FE-DBF3-4FEC-A6BA-1354D795A9EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F92D80FE-DBF3-4FEC-A6BA-1354D795A9EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F92D80FE-DBF3-4FEC-A6BA-1354D795A9EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F92D80FE-DBF3-4FEC-A6BA-1354D795A9EE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

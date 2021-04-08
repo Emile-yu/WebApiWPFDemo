@@ -14,10 +14,12 @@ namespace RetailWPFUserInterface.Library.Api
     public class APIHelper : IAPIHelper
     {
         private HttpClient _apiClient;
+        private ILoggedInUserModel _loggedInUserModel;
 
-        public APIHelper()
+        public APIHelper(ILoggedInUserModel loggedInUserModel)
         {
             InitializeClient();
+            this._loggedInUserModel = loggedInUserModel;
         }
         private void InitializeClient()
         {
@@ -46,6 +48,31 @@ namespace RetailWPFUserInterface.Library.Api
                     var result = await response.Content.ReadAsStringAsync();
                     AuthenticatedUser authenticatedUser = JsonConvert.DeserializeObject<AuthenticatedUser>(result);
                     return authenticatedUser;
+                }
+                else
+                {
+                    throw new Exception(response.ReasonPhrase);
+                }
+            }
+        }
+
+        public async Task GetLoggedInUserInfo(string token)
+        {
+            _apiClient.DefaultRequestHeaders.Accept.Clear();
+            _apiClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            _apiClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
+
+            using (HttpResponseMessage response = await _apiClient.GetAsync("/api/User"))
+            {
+                if (response.IsSuccessStatusCode)
+                {
+                    var result = await response.Content.ReadAsAsync<LoggedInUserModel>();
+                    _loggedInUserModel.CreatedDate = result.CreatedDate;
+                    _loggedInUserModel.Id = result.Id;
+                    _loggedInUserModel.FirstName = result.FirstName;
+                    _loggedInUserModel.LastName = result.LastName;
+                    _loggedInUserModel.Token = token;
+
                 }
                 else
                 {

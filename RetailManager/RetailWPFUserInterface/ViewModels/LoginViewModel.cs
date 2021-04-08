@@ -12,7 +12,6 @@ namespace RetailWPFUserInterface.ViewModels
     {
         private string _username = "tim@iamtimcoreyc.com";
         private string _password = "Pwd12345.";
-        private bool _isErrorVisible;
         private IAPIHelper _apiHelper;
         public LoginViewModel(IAPIHelper apiHelper)
         {
@@ -77,6 +76,8 @@ namespace RetailWPFUserInterface.ViewModels
             {
                 ErrorMessage = "";
                 var result = await _apiHelper.Authenticate(username, password);
+
+                await _apiHelper.GetLoggedInUserInfo(result.Access_Token);
             }
             catch (Exception ex)
             {
