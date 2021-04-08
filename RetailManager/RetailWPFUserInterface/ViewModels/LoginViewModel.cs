@@ -1,4 +1,5 @@
 ﻿using Caliburn.Micro;
+using RetailWPFUserInterface.EventModels;
 using RetailWPFUserInterface.Library.Api;
 using System;
 using System.Collections.Generic;
@@ -13,9 +14,12 @@ namespace RetailWPFUserInterface.ViewModels
         private string _username = "tim@iamtimcoreyc.com";
         private string _password = "Pwd12345.";
         private IAPIHelper _apiHelper;
-        public LoginViewModel(IAPIHelper apiHelper)
+        private IEventAggregator _eventAggregator;
+
+        public LoginViewModel(IAPIHelper apiHelper, IEventAggregator eventAggregator)
         {
             _apiHelper = apiHelper;
+            this._eventAggregator = eventAggregator;
         }
         public string username
         {
@@ -78,6 +82,8 @@ namespace RetailWPFUserInterface.ViewModels
                 var result = await _apiHelper.Authenticate(username, password);
 
                 await _apiHelper.GetLoggedInUserInfo(result.Access_Token);
+
+                _eventAggregator.PublishOnUIThread(new LogOnEvent());
             }
             catch (Exception ex)
             {

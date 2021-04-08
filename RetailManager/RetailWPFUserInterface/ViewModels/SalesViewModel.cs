@@ -34,9 +34,9 @@ namespace RetailWPFUserInterface.ViewModels
             }
         }
 
-        private string _itemQuantity;
+        private int _itemQuantity;
 
-        public string ItemQuantity
+        public int ItemQuantity
         {
             get { return _itemQuantity; }
             set { 
@@ -73,7 +73,7 @@ namespace RetailWPFUserInterface.ViewModels
         {
             get
             {
-                return !String.IsNullOrWhiteSpace(ItemQuantity);
+                return ItemQuantity > 0;
             }
         }
 
@@ -86,7 +86,7 @@ namespace RetailWPFUserInterface.ViewModels
         {
             get
             {
-                return !String.IsNullOrWhiteSpace(ItemQuantity);
+                return ItemQuantity > 0;
             }
         }
 
@@ -100,7 +100,7 @@ namespace RetailWPFUserInterface.ViewModels
         {
             get
             {
-                return !String.IsNullOrWhiteSpace(ItemQuantity);
+                return ItemQuantity > 0;
             }
         }
 
