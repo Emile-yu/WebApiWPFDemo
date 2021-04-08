@@ -122,5 +122,11 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\RetailWPFUserInterface.Library\RetailWPFUserInterface.Library.csproj">
+      <Project>{b597078b-632b-4472-9890-8ff54d411aeb}</Project>
+      <Name>RetailWPFUserInterface.Library</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

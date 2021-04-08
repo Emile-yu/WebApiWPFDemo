@@ -1,5 +1,6 @@
 ﻿using Caliburn.Micro;
 using RetailWPFUserInterface.Helper;
+using RetailWPFUserInterface.Library.Api;
 using RetailWPFUserInterface.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -30,7 +31,8 @@ namespace RetailWPFUserInterface
 
             _container
                 .Singleton<IWindowManager, WindowManager>()
-                .Singleton<IEventAggregator, EventAggregator>();
+                .Singleton<IEventAggregator, EventAggregator>()
+                .Singleton<IAPIHelper, APIHelper>();
 
             GetType().Assembly.GetTypes()
                 .Where(type => type.IsClass)

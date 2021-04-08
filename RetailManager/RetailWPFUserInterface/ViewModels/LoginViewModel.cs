@@ -1,4 +1,5 @@
 ﻿using Caliburn.Micro;
+using RetailWPFUserInterface.Library.Api;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,11 @@ namespace RetailWPFUserInterface.ViewModels
     {
         private string _username;
         private string _password;
-
+        private IAPIHelper _apiHelper;
+        public LoginViewModel(IAPIHelper apiHelper)
+        {
+            _apiHelper = apiHelper;
+        }
         public string username
         {
             get { return _username; }
@@ -44,8 +49,9 @@ namespace RetailWPFUserInterface.ViewModels
             }
         }
 
-        public void Login(string username, string password)
+        public async Task Login()
         {
+            var result = await _apiHelper.Authenticate(username, password);
 
         }
 
