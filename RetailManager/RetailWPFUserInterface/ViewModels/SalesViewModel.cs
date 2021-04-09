@@ -14,11 +14,13 @@ namespace RetailWPFUserInterface.ViewModels
     {
         private int _itemQuantity = 1;
         private IProductEndpoint _productEndpoint;
+        private ISaleEndpoint _saleEndpoint;
         private IConfigHelper _configHelper;
 
-        public SalesViewModel(IProductEndpoint productEndpoint, IConfigHelper configHelper)
+        public SalesViewModel(IProductEndpoint productEndpoint, ISaleEndpoint saleEndpoint, IConfigHelper configHelper)
         {
             this._productEndpoint = productEndpoint;
+            this._saleEndpoint = saleEndpoint;
             this._configHelper = configHelper;
         }
 
@@ -193,6 +195,7 @@ namespace RetailWPFUserInterface.ViewModels
             NotifyOfPropertyChange(() => SubTotal);
             NotifyOfPropertyChange(() => Tax);
             NotifyOfPropertyChange(() => Total);
+            NotifyOfPropertyChange(() => CanCheckOut);
             //how to refresh th cart display
 
         }
@@ -210,18 +213,39 @@ namespace RetailWPFUserInterface.ViewModels
 
         }
 
-
         public bool CanCheckOut
         {
             get
             {
-                return ItemQuantity > 0;
+
+                bool output = false;
+
+                if (Cart.Count > 0)
+                {
+                    output = true;
+                }
+
+                return output;
             }
         }
 
-        public void CheckOut()
+        public async Task CheckOut()
         {
+            SaleModel sale = new SaleModel();
 
+            foreach (var item in Cart)
+            {
+                sale.SaleDetails.Add(new SaleDetailModel
+                {
+                    ProductId = item.Product.Id,
+                    Quantity = item.QuantityInCart
+                });
+            }
+
+            
+            await _saleEndpoint.PostSale(sale);
+
+            //await ResetSalesViewModel();
         }
 
     }
