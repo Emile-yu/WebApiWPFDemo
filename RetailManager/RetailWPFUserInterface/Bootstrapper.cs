@@ -1,8 +1,10 @@
-﻿using Caliburn.Micro;
+﻿using AutoMapper;
+using Caliburn.Micro;
 using RetailWPFUserInterface.Helper;
 using RetailWPFUserInterface.Library.Api;
 using RetailWPFUserInterface.Library.Helpers;
 using RetailWPFUserInterface.Library.Model;
+using RetailWPFUserInterface.Models;
 using RetailWPFUserInterface.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -27,8 +29,23 @@ namespace RetailWPFUserInterface
             "PasswordChanged");
         }
 
+        private IMapper ConfigureAutomapper()
+        {
+            var config = new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<ProductModel, ProductDisplayModel>();
+                cfg.CreateMap<CartItemModel, CartItemDisplayModel>();
+            });
+
+            var mapper = config.CreateMapper();
+
+            return mapper;
+        }
+
         protected override void Configure()
         {
+            _container.Instance(ConfigureAutomapper());
+
             _container.Instance(_container)
                 .PerRequest<IProductEndpoint, ProductEndpoint>()
                 .PerRequest<ISaleEndpoint, SaleEndpoint>();

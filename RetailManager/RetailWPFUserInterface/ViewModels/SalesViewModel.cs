@@ -1,7 +1,9 @@
-﻿using Caliburn.Micro;
+﻿using AutoMapper;
+using Caliburn.Micro;
 using RetailWPFUserInterface.Library.Api;
 using RetailWPFUserInterface.Library.Helpers;
 using RetailWPFUserInterface.Library.Model;
+using RetailWPFUserInterface.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,12 +18,15 @@ namespace RetailWPFUserInterface.ViewModels
         private IProductEndpoint _productEndpoint;
         private ISaleEndpoint _saleEndpoint;
         private IConfigHelper _configHelper;
+        private IMapper _mapper;
 
-        public SalesViewModel(IProductEndpoint productEndpoint, ISaleEndpoint saleEndpoint, IConfigHelper configHelper)
+        public SalesViewModel(IProductEndpoint productEndpoint, ISaleEndpoint saleEndpoint, IConfigHelper configHelper
+            ,IMapper mapper)
         {
             this._productEndpoint = productEndpoint;
             this._saleEndpoint = saleEndpoint;
             this._configHelper = configHelper;
+            this._mapper = mapper;
         }
 
         //when the load products is done, we show the viec
@@ -34,12 +39,13 @@ namespace RetailWPFUserInterface.ViewModels
         public async Task LoadProducts()
         {
             var productList = await _productEndpoint.GetAll();
-            Products = new BindableCollection<ProductModel>(productList);
+            var products = _mapper.Map<List<ProductDisplayModel>>(productList);
+            Products = new BindableCollection<ProductDisplayModel>(products);
         }
 
-        private BindableCollection<ProductModel> _products;
+        private BindableCollection<ProductDisplayModel> _products;
 
-        public BindableCollection<ProductModel> Products
+        public BindableCollection<ProductDisplayModel> Products
         {
             get { return _products; }
             set { 
@@ -49,9 +55,9 @@ namespace RetailWPFUserInterface.ViewModels
             }
         }
 
-        private ProductModel _selectedProduct; 
+        private ProductDisplayModel _selectedProduct; 
 
-        public ProductModel SelectedProduct
+        public ProductDisplayModel SelectedProduct
         {
             get { return _selectedProduct; }
             set {
@@ -62,9 +68,9 @@ namespace RetailWPFUserInterface.ViewModels
         }
 
 
-        private BindableCollection<CartItemModel> _cart = new BindableCollection<CartItemModel>();
+        private BindableCollection<CartItemDisplayModel> _cart = new BindableCollection<CartItemDisplayModel>();
 
-        public BindableCollection<CartItemModel> Cart
+        public BindableCollection<CartItemDisplayModel> Cart
         {
             get { return _cart; }
             set
@@ -172,17 +178,15 @@ namespace RetailWPFUserInterface.ViewModels
 
         public void AddToCart()
         {
-            CartItemModel existingItem = Cart.FirstOrDefault(x => x.Product == SelectedProduct);
+            CartItemDisplayModel existingItem = Cart.FirstOrDefault(x => x.Product == SelectedProduct);
 
             if (existingItem != null)
             {
                 existingItem.QuantityInCart += ItemQuantity;
-                Cart.Remove(existingItem);
-                Cart.Add(existingItem);
             }
             else
             {
-                CartItemModel item = new CartItemModel
+                CartItemDisplayModel item = new CartItemDisplayModel
                 {
                     Product = SelectedProduct,
                     QuantityInCart = ItemQuantity
