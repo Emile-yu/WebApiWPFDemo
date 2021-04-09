@@ -1,6 +1,7 @@
 ﻿using Caliburn.Micro;
 using RetailWPFUserInterface.Helper;
 using RetailWPFUserInterface.Library.Api;
+using RetailWPFUserInterface.Library.Helpers;
 using RetailWPFUserInterface.Library.Model;
 using RetailWPFUserInterface.ViewModels;
 using System;
@@ -37,6 +38,7 @@ namespace RetailWPFUserInterface
                 .Singleton<IWindowManager, WindowManager>()
                 .Singleton<IEventAggregator, EventAggregator>()
                 .Singleton<ILoggedInUserModel, LoggedInUserModel>()
+                .Singleton<IConfigHelper, ConfigHelper>()
                 .Singleton<IAPIHelper, APIHelper>();
 
             GetType().Assembly.GetTypes()

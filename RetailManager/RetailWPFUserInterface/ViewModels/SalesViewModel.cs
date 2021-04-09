@@ -1,5 +1,6 @@
 ﻿using Caliburn.Micro;
 using RetailWPFUserInterface.Library.Api;
+using RetailWPFUserInterface.Library.Helpers;
 using RetailWPFUserInterface.Library.Model;
 using System;
 using System.Collections.Generic;
@@ -11,10 +12,14 @@ namespace RetailWPFUserInterface.ViewModels
 {
     public class SalesViewModel : Screen
     {
-        public SalesViewModel(IProductEndpoint productEndpoint)
+        private int _itemQuantity = 1;
+        private IProductEndpoint _productEndpoint;
+        private IConfigHelper _configHelper;
+
+        public SalesViewModel(IProductEndpoint productEndpoint, IConfigHelper configHelper)
         {
             this._productEndpoint = productEndpoint;
-            
+            this._configHelper = configHelper;
         }
 
         //when the load products is done, we show the viec
@@ -68,8 +73,7 @@ namespace RetailWPFUserInterface.ViewModels
             }
         }
 
-        private int _itemQuantity = 1;
-        private IProductEndpoint _productEndpoint;
+       
 
         public int ItemQuantity
         {
@@ -85,22 +89,32 @@ namespace RetailWPFUserInterface.ViewModels
         {
             get
             {
-                decimal subTotal = 0;
-
-                foreach (var item in Cart)
-                {
-                    subTotal += item.Product.RetailPrice * item.QuantityInCart;
-                }
+                decimal subTotal = CalculateSubTotal();
+               
                 //It's going to convert a currency
                 return subTotal.ToString("C");
             }
+        }
+
+        private decimal CalculateSubTotal()
+        {
+            decimal subTotal = 0;
+
+            foreach (var item in Cart)
+            {
+                subTotal += item.Product.RetailPrice * item.QuantityInCart;
+            }
+
+            return subTotal;
         }
 
         public string Total
         {
             get
             {
-                return $"0.00";
+                decimal total = CalculateSubTotal() + CalculateTax();
+
+                return total.ToString("C");
             }
         }
 
@@ -108,8 +122,25 @@ namespace RetailWPFUserInterface.ViewModels
         {
             get
             {
-                return $"0.00";
+                decimal taxAmount = CalculateTax();
+
+                //It's going to convert a currency
+                return taxAmount.ToString("C");
             }
+        }
+
+        private decimal CalculateTax()
+        {
+            decimal taxAmount = 0;
+
+            decimal taxRate = _configHelper.GetTaxRate()/100;
+
+            foreach (var item in Cart)
+            {
+                taxAmount += item.Product.RetailPrice * item.QuantityInCart * taxRate;
+            }
+
+            return taxAmount;
         }
 
         public bool CanAddToCart
@@ -152,6 +183,8 @@ namespace RetailWPFUserInterface.ViewModels
             SelectedProduct.QuantityInStock -= ItemQuantity;
             ItemQuantity = 1;
             NotifyOfPropertyChange(() => SubTotal);
+            NotifyOfPropertyChange(() => Tax);
+            NotifyOfPropertyChange(() => Total);
             //how to refresh th cart display
 
         }
