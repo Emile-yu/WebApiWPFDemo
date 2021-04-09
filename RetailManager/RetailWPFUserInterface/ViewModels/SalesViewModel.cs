@@ -135,10 +135,18 @@ namespace RetailWPFUserInterface.ViewModels
 
             decimal taxRate = _configHelper.GetTaxRate()/100;
 
-            foreach (var item in Cart)
-            {
-                taxAmount += item.Product.RetailPrice * item.QuantityInCart * taxRate;
-            }
+
+            taxAmount = Cart
+                .Where(x => x.Product.IsTaxable)
+                .Sum(x => x.Product.RetailPrice * x.QuantityInCart * taxRate);
+            //foreach (var item in Cart)
+            //{
+            //    if (item.Product.IsTaxable)
+            //    {
+            //        taxAmount += item.Product.RetailPrice * item.QuantityInCart * taxRate;
+            //    }
+                
+            //}
 
             return taxAmount;
         }
