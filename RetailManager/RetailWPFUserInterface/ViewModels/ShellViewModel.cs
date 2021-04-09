@@ -22,7 +22,8 @@ namespace RetailWPFUserInterface.ViewModels
 
             _eventAggregator.Subscribe(this);
             //refresh the loginviewModel per request
-            ActivateItem(_container.GetInstance<LoginViewModel>());
+            //ActivateItem(_container.GetInstance<LoginViewModel>());
+            ActivateItem(IoC.Get<LoginViewModel>());
         }
 
         public void Handle(LogOnEvent message)
