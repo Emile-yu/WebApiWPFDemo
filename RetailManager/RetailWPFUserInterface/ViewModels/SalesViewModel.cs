@@ -66,6 +66,19 @@ namespace RetailWPFUserInterface.ViewModels
                 NotifyOfPropertyChange(() => CanAddToCart);
             }
         }
+                
+        private CartItemDisplayModel _selectedCartItem;
+
+        public CartItemDisplayModel SelectedCartItem
+        {
+            get { return _selectedCartItem; }
+            set { 
+                _selectedCartItem = value;
+                NotifyOfPropertyChange(() => SelectedCartItem);
+                NotifyOfPropertyChange(() => CanRemoveFromCart);
+            }
+        }
+
 
 
         private BindableCollection<CartItemDisplayModel> _cart = new BindableCollection<CartItemDisplayModel>();
@@ -208,13 +221,35 @@ namespace RetailWPFUserInterface.ViewModels
         {
             get
             {
-                return ItemQuantity > 0;
+                bool output = false;
+
+                if (SelectedCartItem != null && SelectedCartItem?.QuantityInCart > 0)
+                {
+                    output = true;
+                }
+
+                return output;
             }
         }
 
-        public void AddRemoveFromCart()
+        public void RemoveFromCart()
         {
+            SelectedCartItem.Product.QuantityInStock += 1;
 
+            if (SelectedCartItem.QuantityInCart > 1)
+            {
+                SelectedCartItem.QuantityInCart -= 1;
+            }
+            else
+            {
+                Cart.Remove(SelectedCartItem);
+            }
+
+            NotifyOfPropertyChange(() => SubTotal);
+            NotifyOfPropertyChange(() => Tax);
+            NotifyOfPropertyChange(() => Total);
+            NotifyOfPropertyChange(() => CanCheckOut);
+            NotifyOfPropertyChange(() => CanAddToCart);
         }
 
         public bool CanCheckOut
