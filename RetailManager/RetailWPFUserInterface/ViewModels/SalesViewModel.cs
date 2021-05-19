@@ -6,6 +6,7 @@ using RetailWPFUserInterface.Library.Model;
 using RetailWPFUserInterface.Models;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -40,12 +41,12 @@ namespace RetailWPFUserInterface.ViewModels
         {
             var productList = await _productEndpoint.GetAll();
             var products = _mapper.Map<List<ProductDisplayModel>>(productList);
-            Products = new BindableCollection<ProductDisplayModel>(products);
+            Products = new BindingList<ProductDisplayModel>(products);
         }
 
-        private BindableCollection<ProductDisplayModel> _products;
+        private BindingList<ProductDisplayModel> _products;
 
-        public BindableCollection<ProductDisplayModel> Products
+        public BindingList<ProductDisplayModel> Products
         {
             get { return _products; }
             set { 
@@ -66,7 +67,25 @@ namespace RetailWPFUserInterface.ViewModels
                 NotifyOfPropertyChange(() => CanAddToCart);
             }
         }
-                
+
+        private async Task ResetSalesViewModel()
+        {
+            Cart = new BindingList<CartItemDisplayModel>();
+            // TODO: Add clearing the selectedCartItem if it does not do it itself
+            await LoadProducts();
+
+            NotifyOfPropertyChange(() => SubTotal);
+            NotifyOfPropertyChange(() => Tax);
+            NotifyOfPropertyChange(() => Total);
+            NotifyOfPropertyChange(() => CanCheckOut);
+        }
+
+        private void ResetSalesViewModels()
+        { 
+            
+        }
+
+
         private CartItemDisplayModel _selectedCartItem;
 
         public CartItemDisplayModel SelectedCartItem
@@ -81,9 +100,9 @@ namespace RetailWPFUserInterface.ViewModels
 
 
 
-        private BindableCollection<CartItemDisplayModel> _cart = new BindableCollection<CartItemDisplayModel>();
+        private BindingList<CartItemDisplayModel> _cart = new BindingList<CartItemDisplayModel>();
 
-        public BindableCollection<CartItemDisplayModel> Cart
+        public BindingList<CartItemDisplayModel> Cart
         {
             get { return _cart; }
             set
@@ -284,7 +303,7 @@ namespace RetailWPFUserInterface.ViewModels
             
             await _saleEndpoint.PostSale(sale);
 
-            //await ResetSalesViewModel();
+            await ResetSalesViewModel();
         }
 
     }

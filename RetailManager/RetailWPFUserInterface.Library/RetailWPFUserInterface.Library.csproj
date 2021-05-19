@@ -63,6 +63,7 @@
     <Compile Include="Model\ProductModel.cs" />
     <Compile Include="Model\SaleDetailModel.cs" />
     <Compile Include="Model\SaleModel.cs" />
+    <Compile Include="Model\SaleReportModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

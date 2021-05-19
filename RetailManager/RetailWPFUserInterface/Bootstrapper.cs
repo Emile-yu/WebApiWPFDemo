@@ -50,8 +50,7 @@ namespace RetailWPFUserInterface
                 .PerRequest<IProductEndpoint, ProductEndpoint>()
                 .PerRequest<ISaleEndpoint, SaleEndpoint>();
 
-
-
+          
             _container
                 .Singleton<IWindowManager, WindowManager>()
                 .Singleton<IEventAggregator, EventAggregator>()

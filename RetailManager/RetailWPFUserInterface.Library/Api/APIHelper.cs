@@ -89,6 +89,5 @@ namespace RetailWPFUserInterface.Library.Api
                 }
             }
         }
-
     }
 }

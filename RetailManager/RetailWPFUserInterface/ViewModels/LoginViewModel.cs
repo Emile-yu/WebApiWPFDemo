@@ -13,6 +13,7 @@ namespace RetailWPFUserInterface.ViewModels
     {
         private string _username = "tim@iamtimcoreyc.com";
         private string _password = "Pwd12345.";
+        private string _errorMessage;
         private IAPIHelper _apiHelper;
         private IEventAggregator _eventAggregator;
 
@@ -42,14 +43,12 @@ namespace RetailWPFUserInterface.ViewModels
         }
         public bool IsErrorVisible
         {
-            get 
+            get
             {
-                return !String.IsNullOrWhiteSpace(ErrorMessage); 
+                return !String.IsNullOrWhiteSpace(ErrorMessage);
             }
-            
-        }
 
-        private string _errorMessage;
+        }
 
         public string ErrorMessage
         {
