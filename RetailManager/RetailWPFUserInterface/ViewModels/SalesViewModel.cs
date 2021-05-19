@@ -7,9 +7,11 @@ using RetailWPFUserInterface.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Dynamic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace RetailWPFUserInterface.ViewModels
 {
@@ -20,21 +22,48 @@ namespace RetailWPFUserInterface.ViewModels
         private ISaleEndpoint _saleEndpoint;
         private IConfigHelper _configHelper;
         private IMapper _mapper;
+        private StatusInfoViewModel _status;
+        private IWindowManager _windowManager;
 
         public SalesViewModel(IProductEndpoint productEndpoint, ISaleEndpoint saleEndpoint, IConfigHelper configHelper
-            ,IMapper mapper)
+            ,IMapper mapper, StatusInfoViewModel status, IWindowManager windowManager)
         {
             this._productEndpoint = productEndpoint;
             this._saleEndpoint = saleEndpoint;
             this._configHelper = configHelper;
             this._mapper = mapper;
+            this._status = status;
+            this._windowManager = windowManager;
         }
 
         //when the load products is done, we show the viec
         protected override async void OnViewLoaded(object view)
         {
             base.OnViewLoaded(view);
-            await LoadProducts();
+            try
+            {
+                await LoadProducts();
+            }
+            catch (Exception ex)
+            {
+                dynamic settings = new ExpandoObject();
+                settings.WindowsStartUpLocation = WindowStartupLocation.CenterOwner;
+                settings.ResizeMode = ResizeMode.NoResize;
+                settings.Title = "System Error";
+
+                if (ex.Message == "Unauthorized")
+                {
+                    _status.UpdateMessage("Unauthorized Access", "You do not have permission to interact with the Sales form");
+                    _windowManager.ShowDialog(_status, null, settings);
+                }
+                else
+                {
+                    _status.UpdateMessage("Fatal Exception", ex.Message);
+                    _windowManager.ShowDialog(_status, null, settings);
+                }
+               
+                TryClose();
+            }
         }
 
         public async Task LoadProducts()

@@ -22,7 +22,7 @@ namespace RetailDataManager.Controllers
 
             data.SaveSale(sale, userId);
         }
-        [Authorize(Roles = "Admin, Manger")]
+        [Authorize(Roles = "Admin, Manger")]//or
         [Route("GetSalesReport")]
         public List<SaleReportModel> GetSalesReport()
         {
