@@ -46,6 +46,8 @@ namespace RetailWPFUserInterface.ViewModels
             }
             catch (Exception ex)
             {
+                //controller can not do the ui staff
+                //so we create a message box ui to handle it
                 dynamic settings = new ExpandoObject();
                 settings.WindowsStartUpLocation = WindowStartupLocation.CenterOwner;
                 settings.ResizeMode = ResizeMode.NoResize;
@@ -55,6 +57,8 @@ namespace RetailWPFUserInterface.ViewModels
                 {
                     _status.UpdateMessage("Unauthorized Access", "You do not have permission to interact with the Sales form");
                     _windowManager.ShowDialog(_status, null, settings);
+                    
+                    //((IConductor)this.Parent).ActivateItem(IoC.Get<LoginViewModel>());
                 }
                 else
                 {
@@ -108,12 +112,6 @@ namespace RetailWPFUserInterface.ViewModels
             NotifyOfPropertyChange(() => Total);
             NotifyOfPropertyChange(() => CanCheckOut);
         }
-
-        private void ResetSalesViewModels()
-        { 
-            
-        }
-
 
         private CartItemDisplayModel _selectedCartItem;
 

@@ -48,7 +48,8 @@ namespace RetailWPFUserInterface
 
             _container.Instance(_container)
                 .PerRequest<IProductEndpoint, ProductEndpoint>()
-                .PerRequest<ISaleEndpoint, SaleEndpoint>();
+                .PerRequest<ISaleEndpoint, SaleEndpoint>()
+                .PerRequest<IUserEndpoint, UserEndpoint>();
 
           
             _container
